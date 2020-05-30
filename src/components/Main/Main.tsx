@@ -9,9 +9,12 @@ import './Main.scss';
 type Props = {
   people: Person[];
   historyPush: (param: Param, path: string) => void;
+  addPerson: ({
+    name, born, died, sex, fatherName, motherName,
+  }: AddPersonValues) => void;
 };
 
-const Main: React.FC<Props> = ({ people, historyPush }) => {
+const Main: React.FC<Props> = ({ people, historyPush, addPerson }) => {
   return (
     <div className="Main">
       <Switch>
@@ -19,7 +22,7 @@ const Main: React.FC<Props> = ({ people, historyPush }) => {
           path="/add-person"
           render={() => (
             <AddPerson
-              people={people}
+              addPerson={addPerson}
             />
           )}
         />

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Header } from 'semantic-ui-react';
 import './HomePage.scss';
-import BackgroundAnimation from '../BackgroundAnimation';
+import BackgroundAnimation from '../common/BackgroundAnimation';
 
 const HomePage = () => (
   <>

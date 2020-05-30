@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams, Redirect } from 'react-router-dom';
 import debounce from 'lodash.debounce';
 import Nav from './components/Nav';
 import Main from './components/Main';
@@ -56,6 +56,33 @@ const App = () => {
     people.filter(({ name }) => name.toLowerCase().includes(lowerQuery))
   ), [lowerQuery, people]);
 
+  const addPerson = ({
+    name, born, died, sex, fatherName, motherName,
+  }: AddPersonValues) => {
+    const allId: number[] = people.map(person => person.id as number);
+    const nextId = Math.max(...allId) + 1;
+    const age = +died - +born;
+    const century = +died % 100 === 0 ? +died / 100 : Math.ceil(+died / 100);
+
+    const newPerson: Person = {
+      name,
+      sex,
+      age,
+      born: +born,
+      died: +died,
+      century,
+      fatherName,
+      motherName,
+      children: '',
+      slug: '',
+      id: nextId,
+    };
+
+    setPeople([...people, newPerson]);
+
+    return <Redirect to="/people/:id?" />;
+  };
+
   if (!people.length) {
     return <p>Loading...</p>;
   }
@@ -70,6 +97,7 @@ const App = () => {
       <Main
         people={filteredPeople}
         historyPush={historyPush}
+        addPerson={addPerson}
       />
       <footer className="App-Footer">
         &copy;Andreas Just 2020

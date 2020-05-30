@@ -36,3 +36,13 @@ interface TableHeader {
 type Param = {
   [key: string]: string;
 };
+
+type AddPersonValues = {
+  name: string;
+  born: string;
+  died: string;
+  sex: string;
+  fatherName: string;
+  motherName: string;
+  children: string;
+};

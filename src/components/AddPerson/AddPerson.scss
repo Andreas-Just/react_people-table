@@ -1,1 +1,32 @@
+.AddPerson {
+  width: 100%;
 
+  &-Header {
+    text-align: center;
+  }
+
+  &-Form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .AddPerson-FormGroup.fields {
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-left: 0;
+    margin-right: 0;
+    width: 80%;
+  }
+
+  .AddPerson-FormField.fields {
+    justify-content: center;
+    width: 100%;
+  }
+
+  &-Button {
+    width: 73%;
+    margin-top: 10px !important;
+    padding: 10px !important;;
+  }
+}
