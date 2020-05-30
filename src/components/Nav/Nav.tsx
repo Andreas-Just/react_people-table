@@ -25,6 +25,12 @@ const Nav: React.FC<Props> = ({ query, setQuery, applyQuery }) => {
           to="/people"
           exact
         />
+        <Menu.Item
+          as={NavLink}
+          name="add person"
+          to="/add-person"
+          exact
+        />
         <Route path="/people">
           <Menu.Item position="right">
             <Input

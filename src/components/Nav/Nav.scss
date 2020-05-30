@@ -1,5 +1,8 @@
+@import "./src/assets/variables";
+
 .Nav.ui.menu {
-  height: 60px;
+  margin: 0;
+  height: $heightNav;
   font-size: 20px;
   font-weight: bold;
   border-radius: 0;

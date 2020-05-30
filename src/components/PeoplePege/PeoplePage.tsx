@@ -141,7 +141,12 @@ const PeoplePage: React.FC<Props> = React.memo(
 
     return (
       <div className="PeoplePage">
-        <Header size="huge" content="People table" color="teal" />
+        <Header
+          content="People table"
+          className="App-Header"
+          size="huge"
+          color="teal"
+        />
 
         <PeopleTable
           tableHeaders={tableHeaders}

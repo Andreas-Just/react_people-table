@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import HomePage from '../HomePage';
 import PeoplePage from '../PeoplePege';
+import AddPerson from '../AddPerson';
 import ErrorPage from '../ErrorPage';
 import './Main.scss';
 
@@ -14,6 +15,15 @@ const Main: React.FC<Props> = ({ people, historyPush }) => {
   return (
     <div className="Main">
       <Switch>
+        <Route
+          path="/add-person"
+          render={() => (
+            <AddPerson
+              people={people}
+            />
+          )}
+        />
+
         <Route
           path="/people/:personName?"
           render={() => (
