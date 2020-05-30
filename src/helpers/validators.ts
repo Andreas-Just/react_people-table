@@ -1,4 +1,5 @@
-export type Validator = (name: string, value: string) => string;
+/* eslint-disable max-len */
+export type Validator = (name: string, value: string, born?: string) => string;
 
 export const required: Validator = (name, value) => {
   if (value) {
@@ -8,13 +9,24 @@ export const required: Validator = (name, value) => {
   return `${name} is required`;
 };
 
-export const url: Validator = (name, value) => {
-  // eslint-disable-next-line max-len
-  const URL_REGEXP = /^((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www\.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[.!/\\\w]*))?)$/;
+export const validYears: Validator = (name, value) => {
+  return +value < 1400 || +value > new Date().getFullYear()
+    ? `${name} is valid only between 1400 and the current year`
+    : '';
+};
 
-  return URL_REGEXP.test(value)
+export const diedDiff: Validator = (name, value, born) => {
+  return born && +value - +born <= 150 && +value >= +born
     ? ''
-    : `${name} should be a valid URL`;
+    : `${name} must not be less than or exceed the year of birth by more than 120 years`;
+};
+
+export const validName: Validator = (name, value) => {
+  const NAME_REGEXP = /^(?<title>.*\.\s)*(?<firstname>([A-Z][a-z]+\s*)+)(\s)(?<middleinitial>([A-Z]\.?\s)*)(?<lastname>[A-Z][a-zA-Z-']+)(?<suffix>.*)$/;
+
+  return NAME_REGEXP.test(value)
+    ? ''
+    : `${name} must be valid`;
 };
 
 export const minLength = (length: number): Validator => {

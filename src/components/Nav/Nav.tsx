@@ -3,6 +3,11 @@ import { NavLink, Route } from 'react-router-dom';
 import { Input, Menu } from 'semantic-ui-react';
 import './Nav.scss';
 
+const optionQuery = {
+  maxLength: 50,
+  pattern: /[^a-z ]/ig,
+};
+
 type Props = {
   query: string;
   setQuery: (val: string) => void;
@@ -40,8 +45,14 @@ const Nav: React.FC<Props> = ({ query, setQuery, applyQuery }) => {
               size="mini"
               value={query}
               onChange={({ target }) => {
-                setQuery(target.value);
-                applyQuery(target.value);
+                const { pattern, maxLength } = optionQuery;
+                const queryStr = target.value
+                  .replace(pattern, '')
+                  .replace(/\s{2,}/g, ' ')
+                  .slice(0, maxLength);
+
+                setQuery(queryStr);
+                applyQuery(queryStr);
               }}
             />
           </Menu.Item>

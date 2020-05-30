@@ -1,3 +1,5 @@
+@import "src/assets/variables";
+
 .PeopleTable {
 
   &-TableHeader {
@@ -11,7 +13,7 @@
       }
 
       .PeopleTable-HeaderCell:hover {
-        background-color: lighten(#009a93, 5);
+        background-color: lighten($teal, 5);
       }
 
       .PeopleTable-HeaderCell:first-child:only-child {

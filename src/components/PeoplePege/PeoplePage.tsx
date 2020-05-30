@@ -12,8 +12,8 @@ const headersConfig: HeadersConfig = {
   born: 'Born',
   died: 'Died',
   century: 'Century',
-  father: 'Father',
-  mother: 'Mother',
+  fatherName: 'Father',
+  motherName: 'Mother',
   children: 'Children',
 };
 
@@ -41,8 +41,8 @@ const sortType: Callback = (field) => {
       return (a, b) => a[field] - b[field];
     case 'name':
     case 'sex':
-    case 'father':
-    case 'mother':
+    case 'fatherName':
+    case 'motherName':
     case 'children':
       return (a, b) => a[field].localeCompare(b[field]);
     default:

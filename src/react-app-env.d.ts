@@ -1,5 +1,9 @@
 // eslint-disable-next-line
 /// <reference types="react-scripts" />
+interface KeyType {
+  [key: string]: T;
+}
+
 interface Person {
   [key: string]: T;
   name: string;
@@ -23,8 +27,8 @@ interface HeadersConfig {
   born: string;
   died: string;
   century: string;
-  father: string;
-  mother: string;
+  fatherName: string;
+  motherName: string;
   children: string;
 }
 
@@ -33,11 +37,7 @@ interface TableHeader {
   name: string;
 }
 
-type Param = {
-  [key: string]: string;
-};
-
-type AddPersonValues = {
+interface AddPersonValues extends KeyType {
   name: string;
   born: string;
   died: string;
@@ -45,4 +45,8 @@ type AddPersonValues = {
   fatherName: string;
   motherName: string;
   children: string;
+}
+
+type Param = {
+  [key: string]: string;
 };

@@ -1,0 +1,75 @@
+@import "src/assets/functions";
+@import "src/assets/variables";
+
+.Spinner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  height: 100vh;
+  perspective: rem(1000);
+
+  &-TextInfo {
+    color: $teal;
+  }
+
+  &-D {
+    position: relative;
+    top: 0;
+    animation: letter 6s infinite ease-in;
+  }
+
+  &-Circle,
+  &-Line {
+    width: rem(200);
+    height: rem(200);
+    border: 3px solid $teal;
+    border-radius: 50%;
+  }
+
+  &-Circle {
+    position: relative;
+    transform-style: preserve-3d;
+    animation: spinn 6s infinite linear;
+  }
+
+  &-Line {
+    position: absolute;
+    display: block;
+    top: -5px;
+    right: 0;
+    bottom: 0;
+    left: -5px;
+
+    &:nth-child(1) {
+      transform: rotateY(36deg);
+    }
+    &:nth-child(2) {
+      transform: rotateY(72deg);
+    }
+    &:nth-child(3) {
+      transform: rotateY(108deg);
+    }
+    &:nth-child(4) {
+      transform: rotateY(144deg);
+    }
+  }
+}
+
+@keyframes letter {
+  100% {
+    top: 1.25rem;
+  }
+}
+@keyframes spinn {
+  0% {
+    transform: rotateX(180deg) rotateY(0deg) rotateZ(0deg);
+  }
+  50% {
+    transform: rotateX(360deg) rotateY(160deg) rotateZ(200deg);
+  }
+  100% {
+    transform: rotateX(0deg) rotateY(360deg) rotateZ(360deg);
+  }
+}

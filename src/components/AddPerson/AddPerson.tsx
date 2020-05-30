@@ -2,9 +2,15 @@ import React, { useState } from 'react';
 import { Header, Form, Button } from 'semantic-ui-react';
 import FormField from '../FormField';
 import { MessageSuccess, MessageWarning } from '../common/Messages';
-import { Validator } from '../../helpers/validators';
+import { required, validYears, diedDiff, minLength, validName, Validator } from '../../helpers/validators';
 import './AddPerson.scss';
 
+const optionQuery = {
+  maxLengthName: 60,
+  maxLengthYear: 4,
+  patternName: /[^a-z, ]/ig,
+  patternYear: /[^0-9]/g,
+};
 
 type AddPersonErrors = {
   [key in keyof AddPersonValues]: string;
@@ -22,43 +28,43 @@ const fieldConfigs: FieldConfig[] = [
     name: 'name',
     label: 'Full name',
     placeholder: 'Enter full name',
-    validators: [],
+    validators: [required, validName, minLength(2)],
   },
   {
     name: 'born',
     label: 'Year of birth',
     placeholder: 'Enter year of birth',
-    validators: [],
+    validators: [required, validYears],
   },
   {
     name: 'died',
     label: 'Year of death',
     placeholder: 'Enter the year of death',
-    validators: [],
+    validators: [required, validYears, diedDiff],
   },
   {
     name: 'sex',
     label: 'Gender',
     placeholder: 'Choose gender',
-    validators: [],
+    validators: [required],
   },
   {
     name: 'fatherName',
     label: 'Person’s father',
     placeholder: 'Enter the full name of the person’s father',
-    validators: [],
+    validators: [validName, minLength(2)],
   },
   {
     name: 'motherName',
     label: 'Person’s mother',
     placeholder: 'Enter the full name of the person’s mother',
-    validators: [],
+    validators: [validName, minLength(2)],
   },
   {
     name: 'children',
     label: 'Person’s children',
     placeholder: 'Enter the person’s children',
-    validators: [],
+    validators: [validName, minLength(2)],
   },
 ];
 
@@ -82,32 +88,91 @@ const emptyErrors: AddPersonErrors = {
 };
 
 type Props = {
-  addPerson: ({
-    name, born, died, sex, fatherName, motherName,
-  }: AddPersonValues) => void;
+  people: Person[];
+  // addPerson: ({
+  //   name, born, died, sex, fatherName, motherName,
+  // }: AddPersonValues) => void;
 };
 
-const AddPerson: React.FC<Props> = ({ addPerson }) => {
-  const [isValid] = useState(false);
-  const [allFilled] = useState('');
-  const [isFetching] = useState(false);
+const AddPerson: React.FC<Props> = ({ people }) => {
   const [values, setValues] = useState(defaultValues);
+  const [errors, setErrors] = useState(emptyErrors);
 
-  // const [errors, setErrors] = useState(emptyErrors);
-  /* eslint-disable no-console */
-  console.log(addPerson);
+  const validateField = (
+    name: keyof AddPersonValues,
+    value: string,
+    label: string,
+    born = '',
+  ) => {
+    const config = fieldConfigs.find(field => field.name === name);
+
+    if (!config) {
+      throw new Error(`Unknown field "${name}"`);
+    }
+
+    const { validators = [] } = config;
+
+    return validators
+      .map(validator => validator(label, value, born))
+      .filter(Boolean)
+      .join(', ');
+  };
 
   const handleSubmit = () => {
-    console.log('handleSubmit');
+    setValues(values);
+    setErrors(errors);
   };
 
-  const handleChange = () => {
-    setValues(emptyErrors);
+  const handleChange = (
+    event: React.SyntheticEvent, { name, value }: any,
+  ) => {
+    if (!event.target) {
+      return;
+    }
+
+    const {
+      patternName, patternYear,
+      maxLengthName, maxLengthYear,
+    } = optionQuery;
+    let usefulness: string;
+
+    if (name === 'born' || name === 'died') {
+      usefulness = value.replace(patternYear, '').slice(0, maxLengthYear);
+    } else {
+      usefulness = value.replace(patternName, '')
+        .replace(/\s{2,}/g, ' ')
+        .slice(0, maxLengthName);
+    }
+
+    setValues(vals => ({
+      ...vals,
+      [name]: usefulness,
+    }));
   };
 
-  const handleBlur = () => {
-    console.log('handleSubmit');
+  const handleBlur = (event: React.SyntheticEvent) => {
+    const field = (event.target as HTMLFormElement).name as keyof AddPersonValues;
+    const label: string = (event.target as HTMLFormElement).id;
+
+    switch (label) {
+      case 'Gender':
+        return;
+      case 'Year of death':
+        setErrors(err => ({
+          ...err,
+          [field]: validateField(field, values[field], label, values.born),
+        }));
+        break;
+      default:
+        setErrors(err => ({
+          ...err,
+          [field]: validateField(field, values[field], label),
+        }));
+    }
   };
+
+  const isValid = !Object.values(errors).some(Boolean);
+  const allFilled = Object.values(values).every(Boolean);
 
   return (
     <div className="AddPerson">
@@ -120,7 +185,7 @@ const AddPerson: React.FC<Props> = ({ addPerson }) => {
       <Form
         className="AddPerson-Form"
         warning
-        success={isValid && isFetching}
+        success={isValid && allFilled}
         onSubmit={handleSubmit}
       >
         <Form.Group className="AddPerson-FormGroup">
@@ -131,9 +196,10 @@ const AddPerson: React.FC<Props> = ({ addPerson }) => {
                 id={label}
                 name={name}
                 label={label}
+                born={values.born}
                 placeholder={placeholder}
                 value={values[name]}
-                // error={errors[name]}
+                error={errors[name]}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
@@ -143,9 +209,11 @@ const AddPerson: React.FC<Props> = ({ addPerson }) => {
                   id={label}
                   name={name}
                   label={label}
+                  born={values.born}
+                  people={people}
                   placeholder={placeholder}
                   value={values[name]}
-                  // error={errors[name]}
+                  error={errors[name]}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
@@ -156,7 +224,7 @@ const AddPerson: React.FC<Props> = ({ addPerson }) => {
         <Form.Group className="AddPerson-FormGroup">
           {
             isValid && allFilled
-              ? <MessageSuccess isValid={isValid} isFetching={isFetching} />
+              ? <MessageSuccess isValid={isValid} allFilled={allFilled} />
               : <MessageWarning />
           }
         </Form.Group>
@@ -164,7 +232,7 @@ const AddPerson: React.FC<Props> = ({ addPerson }) => {
           <Button
             className="AddPerson-Button"
             content="Add Person"
-            color="yellow"
+            color="teal"
           />
         </Form.Group>
       </Form>
