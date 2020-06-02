@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams, Redirect } from 'react-router-dom';
 import debounce from 'lodash.debounce';
 import Nav from './components/Nav';
 import Main from './components/Main';
@@ -9,10 +9,14 @@ import './App.scss';
 
 const App = () => {
   const [people, setPeople] = useState<Person[]>([]);
+  const [id, setId] = useState<number>(0);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    getTabs().then(setPeople);
+    getTabs().then(responce => {
+      setPeople(responce);
+      setId(responce.length + 1);
+    });
   }, []);
 
   const history = useHistory();
@@ -57,13 +61,12 @@ const App = () => {
     people.filter(({ name }) => name.toLowerCase().includes(lowerQuery))
   ), [lowerQuery, people]);
 
-  /* const addPerson = ({
+   const addPerson = ({
     name, born, died, sex, fatherName, motherName,
   }: AddPersonValues) => {
-    const allId: number[] = people.map(person => person.id as number);
-    const nextId = Math.max(...allId) + 1;
     const age = +died - +born;
     const century = +died % 100 === 0 ? +died / 100 : Math.ceil(+died / 100);
+    const slug = `${name.toLowerCase().split(' ').join('-')}-${born}`;
 
     const newPerson: Person = {
       name,
@@ -75,14 +78,15 @@ const App = () => {
       fatherName,
       motherName,
       children: '',
-      slug: '',
-      id: nextId,
+      slug,
+      id,
     };
 
     setPeople([...people, newPerson]);
+    setId(id + 1);
 
-    return <Redirect to="/people/:id?" />;
-  }; */
+    return <Redirect to={`/people/:${slug}`} />;
+  };
 
   if (!people.length) {
     return <Spinner />;
@@ -98,7 +102,7 @@ const App = () => {
       <Main
         people={filteredPeople}
         historyPush={historyPush}
-        // addPerson={addPerson}
+        addPerson={addPerson}
       />
       <footer className="App-Footer">
         &copy;Andreas Just 2020

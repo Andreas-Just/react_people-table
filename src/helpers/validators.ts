@@ -18,7 +18,7 @@ export const validYears: Validator = (name, value) => {
 export const diedDiff: Validator = (name, value, born) => {
   return born && +value - +born <= 150 && +value >= +born
     ? ''
-    : `${name} must not be less than or exceed the year of birth by more than 120 years`;
+    : `${name} must not be less than or exceed the year of birth by more than 150 years`;
 };
 
 export const validName: Validator = (name, value) => {

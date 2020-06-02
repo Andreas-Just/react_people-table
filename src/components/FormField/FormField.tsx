@@ -30,20 +30,20 @@ const FormField: React.FC<Props> = ({
   value,
   label,
   born = '',
-  people = [],
+  // people = [],
   placeholder = '',
   error = '',
   onChange,
   onBlur = () => {},
 }) => {
-  const fatherOptions = people.map(person => (
-    person.sex === 'm' && person.born < +born && person.died > +born
-      ? { text: person.name, value: person.name }
-      : ''))
-    .filter(Boolean);
+  // const fatherOptions = people.map(person => (
+  //   person.sex === 'm' && person.born < +born && person.died > +born
+  //     ? { text: person.name, value: person.name }
+  //     : ''))
+  //   .filter(Boolean);
 
   // eslint-disable-next-line no-console
-  console.log(fatherOptions);
+  // console.log(fatherOptions[0]);
 
   return (
     <>

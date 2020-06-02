@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Header, Form, Button } from 'semantic-ui-react';
 import FormField from '../FormField';
 import { MessageSuccess, MessageWarning } from '../common/Messages';
@@ -89,14 +89,18 @@ const emptyErrors: AddPersonErrors = {
 
 type Props = {
   people: Person[];
-  // addPerson: ({
-  //   name, born, died, sex, fatherName, motherName,
-  // }: AddPersonValues) => void;
+  addPerson: ({
+    name, born, died, sex, fatherName, motherName,
+  }: AddPersonValues) => void;
 };
 
-const AddPerson: React.FC<Props> = ({ people }) => {
+const AddPerson: React.FC<Props> = ({ people, addPerson }) => {
   const [values, setValues] = useState(defaultValues);
   const [errors, setErrors] = useState(emptyErrors);
+  const allFilled = useMemo(() => Object.values(values).every(Boolean), [values]);
+  const isValid = useCallback((err: AddPersonErrors) => (
+    !Object.values(err).some(Boolean)
+  ), []);
 
   const validateField = (
     name: keyof AddPersonValues,
@@ -118,9 +122,24 @@ const AddPerson: React.FC<Props> = ({ people }) => {
       .join(', ');
   };
 
-  const handleSubmit = () => {
-    setValues(values);
-    setErrors(errors);
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+
+    const newErrors: AddPersonErrors = { ...emptyErrors };
+
+    fieldConfigs.forEach(({ name, label }) => {
+      newErrors[name] = validateField(name, values[name], label, values.born);
+    });
+
+    if (!isValid(newErrors)) {
+      setErrors(newErrors);
+
+      return;
+    }
+
+    addPerson(values);
+    setValues(defaultValues);
+    setErrors(emptyErrors);
   };
 
   const handleChange = (
@@ -156,7 +175,11 @@ const AddPerson: React.FC<Props> = ({ people }) => {
 
     switch (label) {
       case 'Gender':
-        return;
+        setErrors(err => ({
+          ...err,
+          sex: required(label, values.sex),
+        }));
+        break;
       case 'Year of death':
         setErrors(err => ({
           ...err,
@@ -171,8 +194,7 @@ const AddPerson: React.FC<Props> = ({ people }) => {
     }
   };
 
-  const isValid = !Object.values(errors).some(Boolean);
-  const allFilled = Object.values(values).every(Boolean);
+  const noMistakes = isValid(errors);
 
   return (
     <div className="AddPerson">
@@ -185,7 +207,7 @@ const AddPerson: React.FC<Props> = ({ people }) => {
       <Form
         className="AddPerson-Form"
         warning
-        success={isValid && allFilled}
+        success={noMistakes && allFilled}
         onSubmit={handleSubmit}
       >
         <Form.Group className="AddPerson-FormGroup">
@@ -223,8 +245,8 @@ const AddPerson: React.FC<Props> = ({ people }) => {
         </Form.Group>
         <Form.Group className="AddPerson-FormGroup">
           {
-            isValid && allFilled
-              ? <MessageSuccess isValid={isValid} allFilled={allFilled} />
+            noMistakes && allFilled
+              ? <MessageSuccess isValid={noMistakes} allFilled={allFilled} />
               : <MessageWarning />
           }
         </Form.Group>
