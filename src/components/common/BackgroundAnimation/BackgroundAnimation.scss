@@ -1,71 +1,68 @@
 @import "../../../assets/variables";
 
-#home-anim {
+.Hero {
   position: absolute;
-  top: 0 + $heightNav;
+  top: 0;
   left: 0;
-  z-index: -1;
   width: 100%;
-  height: calc(100% - 60px * 2);
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
 }
 
-#home {
-  //width: 100%;
-  //height: calc(100% - 60px * 2);
+.Cube {
+  position: absolute;
+  top: 80vh;
+  left: 45vw;
+  width: 10px;
+  height: 10px;
+  transform-origin: top left;
+  transform: scale(0) rotate(0deg) translate(-50%, -50%);
+  animation: cube 10.5s ease-in forwards infinite;
+
+  &:nth-child(2n) {
+    border-image-source: linear-gradient(45deg, $pink, $cyan);
+  }
+
+  &:nth-child(2) {
+    animation-delay: 1.5s;
+    left: 25vw;
+    top: 40vh;
+  }
+
+  &:nth-child(3) {
+    animation-delay: 3s;
+    left: 75vw;
+    top: 50vh;
+  }
+
+  &:nth-child(4) {
+    animation-delay: 4.5s;
+    left: 90vw;
+    top: 10vh;
+  }
+
+  &:nth-child(5) {
+    animation-delay: 6s;
+    left: 10vw;
+    top: 85vh;
+  }
+
+  &:nth-child(6) {
+    animation-delay: 7.5s;
+    left: 30vw;
+    top: 10vh;
+  }
 }
 
-#red {
-  fill: none;
-  opacity: 0.15;
-  stroke: #ce1b5f;
-  stroke-width: 12;
-  stroke-miterlimit: 10;
-  animation: show 4s;
-  animation-fill-mode: forwards;
-  animation-iteration-count: infinite;
-  animation-timing-function: ease-in-out;
-}
+@keyframes cube {
+  from {
+    transform: scale(0) rotate(0deg) translate(-50%, -50%);
+    opacity: 1;
+  }
 
-#blue {
-  fill: none;
-  opacity: 0.15;
-  stroke: #06a1c4;
-  stroke-width: 12;
-  stroke-miterlimit: 10;
-  animation: show 4s;
-  animation-fill-mode: forwards;
-  animation-iteration-count: infinite;
-  animation-timing-function: ease-in-out;
-}
-
-#light-blue {
-  fill: none;
-  opacity: 0.15;
-  stroke: #06a1c4;
-  stroke-width: 6;
-  stroke-miterlimit: 10;
-  stroke-dasharray: 200;
-  stroke-dashoffset: 800;
-  animation: draw 4s;
-  animation-fill-mode: forwards;
-  animation-iteration-count: infinite;
-  animation-timing-function: ease-in-out;
-}
-
-@keyframes draw {
   to {
-    stroke-dashoffset: 0;
-  }
-}
-
-@keyframes show {
-  0% {
-    opacity: 0.15;
-  }
-  50% {
-    opacity: 0.2;
-  }
-  100% {
-    opacity: 0.15;
+    transform: scale(20) rotate(960deg) translate(-50%, -50%);
+    opacity: 0;
   }
 }

@@ -6,6 +6,7 @@ import Main from './components/Main';
 import Spinner from './components/common/Spinner';
 import { getTabs } from './api/getTabs';
 import './App.scss';
+import BackgroundAnimation from './components/common/BackgroundAnimation';
 
 const App = () => {
   const [people, setPeople] = useState<Person[]>([]);
@@ -115,6 +116,7 @@ const App = () => {
       <footer className="App-Footer">
         &copy;Andreas Just 2020
       </footer>
+      <BackgroundAnimation />
     </div>
   );
 };
