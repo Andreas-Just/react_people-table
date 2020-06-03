@@ -22,7 +22,7 @@ export const diedDiff: Validator = (name, value, born) => {
 };
 
 export const validName: Validator = (name, value) => {
-  const NAME_REGEXP = /^(?<title>.*\.\s)*(?<firstname>([A-Z][a-z]+\s*)+)(\s)(?<middleinitial>([A-Z]\.?\s)*)(?<lastname>[A-Z][a-zA-Z-']+)(?<suffix>.*)$/;
+  const NAME_REGEXP = /^((?<title>.*\.\s)*(?<firstname>([A-Z][a-z]+\s*)+)(\s)(?<suffix>.*)(?<middleinitial>([A-Z]\.?\s)*)(?<lastname>[A-Z][a-zA-Z-']+))?$/;
 
   return NAME_REGEXP.test(value)
     ? ''

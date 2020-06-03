@@ -51,13 +51,13 @@ const fieldConfigs: FieldConfig[] = [
   {
     name: 'fatherName',
     label: 'Person’s father',
-    placeholder: 'Enter the full name of the person’s father',
+    placeholder: 'Choose the father’s full name',
     validators: [validName, minLength(2)],
   },
   {
     name: 'motherName',
     label: 'Person’s mother',
-    placeholder: 'Enter the full name of the person’s mother',
+    placeholder: 'Choose the mother’s full name',
     validators: [validName, minLength(2)],
   },
   {
@@ -169,7 +169,7 @@ const AddPerson: React.FC<Props> = ({ people, addPerson }) => {
     }));
   };
 
-  const handleBlur = (event: React.SyntheticEvent) => {
+  const handleBlur = (event: React.FormEvent<EventTarget & Element>) => {
     const field = (event.target as HTMLFormElement).name as keyof AddPersonValues;
     const label: string = (event.target as HTMLFormElement).id;
 
@@ -178,6 +178,18 @@ const AddPerson: React.FC<Props> = ({ people, addPerson }) => {
         setErrors(err => ({
           ...err,
           sex: required(label, values.sex),
+        }));
+        break;
+      case 'Person’s father':
+        setErrors(err => ({
+          ...err,
+          fatherName: validName(label, values.fatherName),
+        }));
+        break;
+      case 'Person’s mother':
+        setErrors(err => ({
+          ...err,
+          motherName: validName(label, values.motherName),
         }));
         break;
       case 'Year of death':
@@ -212,7 +224,7 @@ const AddPerson: React.FC<Props> = ({ people, addPerson }) => {
       >
         <Form.Group className="AddPerson-FormGroup">
           {fieldConfigs.map(({ name, label, placeholder }) => (
-            name === 'born' || name === 'died' || name === 'sex' ? (
+            name === 'born' || name === 'died' ? (
               <FormField
                 key={name}
                 id={label}

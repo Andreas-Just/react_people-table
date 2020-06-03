@@ -13,9 +13,9 @@ const App = () => {
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    getTabs().then(responce => {
-      setPeople(responce);
-      setId(responce.length + 1);
+    getTabs().then(response => {
+      setPeople(response);
+      setId(response.length + 1);
     });
   }, []);
 
@@ -62,7 +62,7 @@ const App = () => {
   ), [lowerQuery, people]);
 
   const addPerson = ({
-    name, born, died, sex, fatherName, motherName,
+    name, born, died, sex, fatherName, motherName, children,
   }: AddPersonValues) => {
     const age = +died - +born;
     const century = +died % 100 === 0 ? +died / 100 : Math.ceil(+died / 100);
@@ -77,7 +77,7 @@ const App = () => {
       century,
       fatherName,
       motherName,
-      children: '',
+      children,
       slug,
       id,
     };
@@ -89,7 +89,7 @@ const App = () => {
       {
         sortBy: 'name',
         sortOrder: 'asc',
-        perPage: '20',
+        perPage: '10',
         query: name.slice(0, 2),
       },
       slug,

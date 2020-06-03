@@ -1,10 +1,7 @@
 import React, { useMemo } from 'react';
+import cn from 'classnames';
 import { DropdownItemProps, Form } from 'semantic-ui-react';
 import './FormField.scss';
-
-// const defaultOptions: Option[] = [
-//   { key: 'default', text: 'Enter year of birth', value: 'off' },
-// ];
 
 const genderOptions: DropdownItemProps[] = [
   { key: 'male', text: 'Male', value: 'm' },
@@ -21,7 +18,7 @@ type Props = {
   placeholder: string;
   error: string;
   onChange: (event: React.SyntheticEvent, data: object) => void;
-  onBlur?: (event: React.SyntheticEvent, data: object) => void;
+  onBlur?: (event: React.FormEvent<EventTarget & Element>) => void;
 };
 
 const FormField: React.FC<Props> = ({
@@ -60,7 +57,6 @@ const FormField: React.FC<Props> = ({
     return arr;
   }, []);
 
-  // console.log(fatherOptions, motherOptions);
   const options = useMemo(() => {
     if (name === 'fatherName') {
       return fatherOptions;
@@ -78,10 +74,18 @@ const FormField: React.FC<Props> = ({
       {name === 'sex' || name === 'fatherName' || name === 'motherName'
         ? (
           <Form.Select
-            className="FormField-Input"
-            width={name === 'fatherName' || name === 'motherName' ? 12 : 4}
+            className={cn({
+              'FormField-Select': true,
+              'FormField-Select_gender': name === 'sex',
+            })}
+            width={12}
+            text={
+              (name === 'fatherName' || name === 'motherName') && !born
+                ? 'Enter year of birth' : ''
+            }
             options={options}
             error={!!error && { content: error }}
+            disabled={(name === 'fatherName' || name === 'motherName') && !born}
             id={id}
             name={name}
             label={label}
@@ -94,7 +98,7 @@ const FormField: React.FC<Props> = ({
         : (
           <Form.Input
             className="FormField-Input"
-            width={name === 'born' || name === 'died' ? 4 : 12}
+            width={name === 'born' || name === 'died' ? 6 : 12}
             error={!!error && { content: error }}
             disabled={name === 'died' && !born}
             id={id}

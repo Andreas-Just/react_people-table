@@ -16,6 +16,7 @@
     flex-wrap: wrap;
     margin-left: 0;
     margin-right: 0;
+    margin-bottom: 0;
     width: 80%;
   }
 
@@ -26,7 +27,16 @@
 
   &-Button {
     width: 73%;
-    margin-top: 10px !important;
+    margin: 1em 0.5em !important;
     padding: 1em !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .AddPerson {
+
+    &-Button {
+      width: 100%;
+    }
   }
 }

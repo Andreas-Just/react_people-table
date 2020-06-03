@@ -1,3 +1,12 @@
-.FormField {
-  //justify-content: center;
+.AddPerson {
+  .AddPerson-FormGroup {
+    .FormField-Input.disabled,
+    .FormField-Select.disabled {
+      opacity: 1;
+    }
+    .FormField-Select.FormField-Select_gender {
+      flex-shrink: 0;
+      flex-grow: 0;
+    }
+  }
 }
