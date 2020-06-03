@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { DropdownItemProps, Form } from 'semantic-ui-react';
 import './FormField.scss';
 
@@ -30,29 +30,57 @@ const FormField: React.FC<Props> = ({
   value,
   label,
   born = '',
-  // people = [],
+  people = [],
   placeholder = '',
   error = '',
   onChange,
   onBlur = () => {},
 }) => {
-  // const fatherOptions = people.map(person => (
-  //   person.sex === 'm' && person.born < +born && person.died > +born
-  //     ? { text: person.name, value: person.name }
-  //     : ''))
-  //   .filter(Boolean);
+  const fatherOptions = people?.reduce((arr: DropdownItemProps[], person: Person) => {
+    if (person.sex === 'm' && person.born < +born && person.died > +born) {
+      arr.push({
+        key: String(person.id),
+        text: person.name,
+        value: person.name,
+      });
+    }
 
-  // eslint-disable-next-line no-console
-  // console.log(fatherOptions[0]);
+    return arr;
+  }, []);
+
+  const motherOptions = people?.reduce((arr: DropdownItemProps[], person: Person) => {
+    if (person.sex === 'f' && person.born < +born && person.died > +born) {
+      arr.push({
+        key: String(person.id),
+        text: person.name,
+        value: person.name,
+      });
+    }
+
+    return arr;
+  }, []);
+
+  // console.log(fatherOptions, motherOptions);
+  const options = useMemo(() => {
+    if (name === 'fatherName') {
+      return fatherOptions;
+    }
+
+    if (name === 'motherName') {
+      return motherOptions;
+    }
+
+    return genderOptions;
+  }, [name, fatherOptions, motherOptions]);
 
   return (
     <>
-      {name === 'sex'
+      {name === 'sex' || name === 'fatherName' || name === 'motherName'
         ? (
           <Form.Select
             className="FormField-Input"
-            width={4}
-            options={genderOptions}
+            width={name === 'fatherName' || name === 'motherName' ? 12 : 4}
+            options={options}
             error={!!error && { content: error }}
             id={id}
             name={name}

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory, useLocation, useParams, Redirect } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import debounce from 'lodash.debounce';
 import Nav from './components/Nav';
 import Main from './components/Main';
@@ -61,7 +61,7 @@ const App = () => {
     people.filter(({ name }) => name.toLowerCase().includes(lowerQuery))
   ), [lowerQuery, people]);
 
-   const addPerson = ({
+  const addPerson = ({
     name, born, died, sex, fatherName, motherName,
   }: AddPersonValues) => {
     const age = +died - +born;
@@ -85,7 +85,15 @@ const App = () => {
     setPeople([...people, newPerson]);
     setId(id + 1);
 
-    return <Redirect to={`/people/:${slug}`} />;
+    historyPush(
+      {
+        sortBy: 'name',
+        sortOrder: 'asc',
+        perPage: '20',
+        query: name.slice(0, 2),
+      },
+      slug,
+    );
   };
 
   if (!people.length) {
