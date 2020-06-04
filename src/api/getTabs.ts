@@ -13,8 +13,8 @@ export const getTabs = async (): Promise<Person[]> => {
   return people.map((person: Person, idx: number) => ({
     ...person,
     id: idx + 1,
-    father: person.fatherName || '',
-    mother: person.motherName || '',
+    fatherName: person.fatherName || '',
+    motherName: person.motherName || '',
     age: person.died - person.born,
     century: Math.ceil(person.died / 100),
     children: people

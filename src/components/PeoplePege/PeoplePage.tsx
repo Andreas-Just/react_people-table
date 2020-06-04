@@ -118,9 +118,9 @@ const PeoplePage: React.FC<Props> = React.memo(
       }
 
       if (path) {
-        if (field === 'mother') {
+        if (field === 'motherName') {
           historyPush({}, path);
-        } else if (field === 'father') {
+        } else if (field === 'fatherName') {
           historyPush({}, path);
         }
       }

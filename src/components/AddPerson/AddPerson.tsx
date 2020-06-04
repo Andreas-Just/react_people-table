@@ -95,8 +95,8 @@ type Props = {
 };
 
 const AddPerson: React.FC<Props> = ({ people, addPerson }) => {
-  const [values, setValues] = useState(defaultValues);
-  const [errors, setErrors] = useState(emptyErrors);
+  const [values, setValues] = useState<typeof defaultValues>(defaultValues);
+  const [errors, setErrors] = useState<typeof emptyErrors>(emptyErrors);
   const allFilled = useMemo(() => Object.values(values).every(Boolean), [values]);
   const isValid = useCallback((err: AddPersonErrors) => (
     !Object.values(err).some(Boolean)
@@ -130,7 +130,7 @@ const AddPerson: React.FC<Props> = ({ people, addPerson }) => {
     fieldConfigs.forEach(({ name, label }) => {
       newErrors[name] = validateField(name, values[name], label, values.born);
     });
-
+    console.log(values)
     if (!isValid(newErrors)) {
       setErrors(newErrors);
 

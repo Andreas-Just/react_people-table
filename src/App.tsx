@@ -91,7 +91,7 @@ const App = () => {
         sortBy: 'name',
         sortOrder: 'asc',
         perPage: '10',
-        query: name.slice(0, 2),
+        query: name.slice(0, 2).toLowerCase(),
       },
       slug,
     );
