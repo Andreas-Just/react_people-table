@@ -20,7 +20,7 @@ interface FieldConfig {
   name: keyof AddPersonValues;
   label: string;
   placeholder: string;
-  validators?: Validator[];
+  validators: Validator[];
 }
 
 const fieldConfigs: FieldConfig[] = [
@@ -68,6 +68,13 @@ const fieldConfigs: FieldConfig[] = [
   },
 ];
 
+const requiredFillKey = fieldConfigs.map((field: FieldConfig) => (
+  field.validators.some(func => func.name === 'required')
+    ? field.name : '')).filter(Boolean);
+const requiredFillName = fieldConfigs.map((field: FieldConfig) => (
+  field.validators.some(func => func.name === 'required')
+    ? field.label : '')).filter(Boolean).join(', ');
+
 const defaultValues: AddPersonValues = {
   name: '',
   born: '',
@@ -97,10 +104,12 @@ type Props = {
 const AddPerson: React.FC<Props> = ({ people, addPerson }) => {
   const [values, setValues] = useState<typeof defaultValues>(defaultValues);
   const [errors, setErrors] = useState<typeof emptyErrors>(emptyErrors);
-  const allFilled = useMemo(() => Object.values(values).every(Boolean), [values]);
   const isValid = useCallback((err: AddPersonErrors) => (
     !Object.values(err).some(Boolean)
   ), []);
+  const requiredFill = useMemo(() => requiredFillKey.every((key) => (
+    key ? Boolean(values[key]) : false
+  )), [values]);
 
   const validateField = (
     name: keyof AddPersonValues,
@@ -130,7 +139,7 @@ const AddPerson: React.FC<Props> = ({ people, addPerson }) => {
     fieldConfigs.forEach(({ name, label }) => {
       newErrors[name] = validateField(name, values[name], label, values.born);
     });
-    console.log(values)
+
     if (!isValid(newErrors)) {
       setErrors(newErrors);
 
@@ -219,7 +228,7 @@ const AddPerson: React.FC<Props> = ({ people, addPerson }) => {
       <Form
         className="AddPerson-Form"
         warning
-        success={noMistakes && allFilled}
+        success={noMistakes && requiredFill}
         onSubmit={handleSubmit}
       >
         <Form.Group className="AddPerson-FormGroup">
@@ -257,9 +266,9 @@ const AddPerson: React.FC<Props> = ({ people, addPerson }) => {
         </Form.Group>
         <Form.Group className="AddPerson-FormGroup">
           {
-            noMistakes && allFilled
-              ? <MessageSuccess isValid={noMistakes} allFilled={allFilled} />
-              : <MessageWarning />
+            noMistakes && requiredFill
+              ? <MessageSuccess isValid={noMistakes} required={requiredFill} />
+              : <MessageWarning fieldName={requiredFillName} />
           }
         </Form.Group>
         <Form.Group className="AddPerson-FormGroup">
