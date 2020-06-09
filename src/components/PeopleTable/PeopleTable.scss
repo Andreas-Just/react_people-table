@@ -2,18 +2,34 @@
 
 .PeopleTable {
 
+  &.ui.table {
+    width: 90%;
+    margin: 1em auto;
+  }
+
   &-TableHeader {
     .PeopleTable-TableRow {
       .PeopleTable-HeaderCell {
         position: relative;
         padding-left: 20px;
-        padding-right: 20px;
         text-align: center;
         cursor: pointer;
+
+        &_id,
+        &_sex,
+        &_age {
+          width: 65px;
+        }
+        &_born,
+        &_died,
+        &_century {
+          width: 85px;
+        }
+
       }
 
       .PeopleTable-HeaderCell:hover {
-        background-color: lighten($teal, 5);
+        background-color: lighten($teal, 9);
       }
 
       .PeopleTable-HeaderCell:first-child:only-child {

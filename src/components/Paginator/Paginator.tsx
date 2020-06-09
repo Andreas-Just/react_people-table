@@ -1,6 +1,7 @@
 // import memoize from 'memoize-one';
 import React from 'react';
 import { Icon, Pagination, Table, Dropdown } from 'semantic-ui-react';
+import './Paginator.scss';
 
 const options = [
   { key: 1, text: '5 people', value: 5 },
@@ -28,13 +29,13 @@ const Paginator: React.FC<Props> = ({
     <Table.HeaderCell colSpan="10" className="Pagination">
       <Dropdown
         placeholder="Select people per page"
+        pointing="top"
         floated="left"
         selection
         name="perPage"
         value={perPage}
         onChange={onSelectPerPage}
         options={options}
-        direction="right"
       />
       { totalPages !== 1
         && (

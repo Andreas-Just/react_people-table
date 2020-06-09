@@ -36,13 +36,23 @@ const PeopleTable: React.FC<Props> = React.memo(
     onSelectPerPage,
   }) => {
     return (
-      <Table celled className="PeopleTable" color="teal" inverted>
+      <Table
+        className="PeopleTable"
+        fixed
+        basic
+        celled
+        color="teal"
+        inverted
+      >
         <Table.Header className="PeopleTable-TableHeader">
           <Table.Row className="PeopleTable-TableRow">
             {tableHeaders.map(({ name, code }) => (
               <Table.HeaderCell
                 key={code}
-                className="PeopleTable-HeaderCell"
+                className={cn({
+                  'PeopleTable-HeaderCell': true,
+                  [`PeopleTable-HeaderCell_${code}`]: true,
+                })}
                 onClick={() => onSortTable(code)}
               >
                 {sortedBy === code && (
@@ -79,7 +89,7 @@ const PeopleTable: React.FC<Props> = React.memo(
           ))}
         </Table.Body>
 
-        <Table.Footer>
+        <Table.Footer className="PeopleTable-TableFooter">
           <Table.Row className="PeopleTable-TableRow">
             <Paginator
               page={page}
