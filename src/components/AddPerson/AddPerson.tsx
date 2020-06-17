@@ -267,8 +267,12 @@ const AddPerson: React.FC<Props> = ({ people, addPerson }) => {
         <Form.Group className="AddPerson-FormGroup">
           {
             noMistakes && requiredFill
-              ? <MessageSuccess isValid={noMistakes} required={requiredFill} />
-              : <MessageWarning fieldName={requiredFillName} />
+              ? (
+                <MessageSuccess
+                  isValid={noMistakes}
+                  required={requiredFill}
+                />
+              ) : <MessageWarning fieldName={requiredFillName} />
           }
         </Form.Group>
         <Form.Group className="AddPerson-FormGroup">
