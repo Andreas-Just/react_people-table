@@ -5,15 +5,26 @@ import { MessageSuccess, MessageWarning } from '../common/Messages';
 import { required, validYears, diedDiff, minLength, validName, Validator } from '../../helpers/validators';
 import './AddPerson.scss';
 
-const optionQuery = {
-  maxLengthName: 60,
-  maxLengthYear: 4,
-  patternName: /[^a-z, ]/ig,
-  patternYear: /[^0-9]/g,
-};
-
 type AddPersonErrors = {
   [key in keyof AddPersonValues]: string;
+};
+const defaultValues: AddPersonValues = {
+  name: '',
+  born: '',
+  died: '',
+  sex: '',
+  fatherName: '',
+  motherName: '',
+  children: '',
+};
+const emptyErrors: AddPersonErrors = {
+  name: '',
+  born: '',
+  died: '',
+  sex: '',
+  fatherName: '',
+  motherName: '',
+  children: '',
 };
 
 interface FieldConfig {
@@ -67,7 +78,18 @@ const fieldConfigs: FieldConfig[] = [
     validators: [validName, minLength(2)],
   },
 ];
-
+/*
+type RequiredFields = {
+  name: Array<string>;
+  label: Array<string>;
+};
+const requiredFields: RequiredFields = {
+  name: ['name', 'born', 'died', 'sex'],
+  label: ['Full name', 'Year of birth', 'Year of death', 'Gender'],
+};
+const requiredFillKey = requiredFields.name;
+const requiredFillName = requiredFields.label.join(', ');
+*/
 const requiredFillKey = fieldConfigs.map((field: FieldConfig) => (
   field.validators.some(func => func.name === 'required')
     ? field.name : '')).filter(Boolean);
@@ -75,23 +97,11 @@ const requiredFillName = fieldConfigs.map((field: FieldConfig) => (
   field.validators.some(func => func.name === 'required')
     ? field.label : '')).filter(Boolean).join(', ');
 
-const defaultValues: AddPersonValues = {
-  name: '',
-  born: '',
-  died: '',
-  sex: '',
-  fatherName: '',
-  motherName: '',
-  children: '',
-};
-const emptyErrors: AddPersonErrors = {
-  name: '',
-  born: '',
-  died: '',
-  sex: '',
-  fatherName: '',
-  motherName: '',
-  children: '',
+const optionQuery = {
+  maxLengthName: 60,
+  maxLengthYear: 4,
+  patternName: /[^a-z, ]/ig,
+  patternYear: /[^0-9]/g,
 };
 
 type Props = {

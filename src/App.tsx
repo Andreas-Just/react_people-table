@@ -4,9 +4,9 @@ import debounce from 'lodash.debounce';
 import Nav from './components/Nav';
 import Main from './components/Main';
 import Spinner from './components/common/Spinner';
+import BackgroundAnimation from './components/common/BackgroundAnimation';
 import { getTabs } from './api/getTabs';
 import './App.scss';
-import BackgroundAnimation from './components/common/BackgroundAnimation';
 
 const App = () => {
   const [people, setPeople] = useState<Person[]>([]);

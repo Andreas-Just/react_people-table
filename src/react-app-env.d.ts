@@ -37,7 +37,8 @@ interface TableHeader {
   name: string;
 }
 
-interface AddPersonValues extends KeyType {
+type AddPersonValues = {
+  [key: string]: string;
   name: string;
   born: string;
   died: string;
@@ -45,7 +46,7 @@ interface AddPersonValues extends KeyType {
   fatherName: string;
   motherName: string;
   children: string;
-}
+};
 
 type Param = {
   [key: string]: string;

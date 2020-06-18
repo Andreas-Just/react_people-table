@@ -10,7 +10,7 @@ const genderOptions: DropdownItemProps[] = [
 
 type Props = {
   id: string;
-  name: string;
+  name: string | number;
   value: string;
   born: string;
   people?: Person[];
